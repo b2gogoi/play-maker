@@ -25,13 +25,14 @@
   text-align: left;
   padding-left: 10px;
   background-color: #1C365A;
-  height: 60px;
+  height: 50px;
   color: white;
 
 }
 
 .App-header > h1 {
   margin: unset;
+  font-weight: 500;
 }
 
 .App-body {
@@ -40,5 +41,35 @@
 }
 
 .App-body .tabpanel {
-  padding: 40px; 
+  padding: 0 40px; 
+  color: #484b50;
+  
 }
+
+.App-body .tabpanel h2 {
+  font-weight: 500;
+}
+
+.tabpanel form > div {
+  margin-bottom: 30px;
+}
+
+.addplayer-form {
+  background-color: #ffffff;
+  border: 1px dotted #525353;
+  border-radius: 10px;
+  padding: 10px 30px;
+}
+
+.action-row {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.players-list {
+  border-top: 2px solid #1C365A;
+  margin-top: 20px;
+  padding: 15px 0;
+}
+
+

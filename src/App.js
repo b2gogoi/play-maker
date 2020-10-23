@@ -7,13 +7,6 @@ import TeamList from './feature/teamlist/TeamList';
 import Quarter from './feature/quarter/Quarter';
 import './App.css';
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -35,9 +28,14 @@ function TabPanel(props) {
 }
 
 function App() {
-  const [tab, setTab] = React.useState(0);
+  const [tab, setTab] = useState(0);
   const [team, setTeam] = useState([]);
   const [quarter, setQuarter] = useState({});
+
+  const updateTeam = (players) => {
+    console.log('updateTeam : ', players.length);
+    setTeam(players);
+  }
   
 
   const handleChange = (event, newValue) => {
@@ -51,12 +49,12 @@ function App() {
         <div className="App-body">
           <AppBar position="static">
             <Tabs value={tab} onChange={handleChange}>
-              <Tab label="Compose Team" {...a11yProps(0)} />
-              <Tab label="First Quarter" {...a11yProps(1)} />
+              <Tab label="Compose Team" />
+              <Tab label="First Quarter" />
             </Tabs>
           </AppBar>
           <TabPanel value={tab} index={0}>
-            <TeamList team={team} />
+            <TeamList team={team} update={updateTeam} />
           </TabPanel>
           <TabPanel value={tab} index={1}>
             <Quarter team={team} quarter={quarter} />
