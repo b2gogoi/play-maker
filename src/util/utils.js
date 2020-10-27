@@ -7,6 +7,14 @@ export const types = {
     NAME: 'name'
 };
 
+export const positions = [
+    {name: 'Point Gaurd', code: 'PG'},
+    {name: 'Shooting Gaurd', code: 'SG'},
+    {name: 'Small Forward', code: 'SF'},
+    {name: 'Power Forward', code: 'PF'},
+    {name: 'Center', code: 'C'}
+]
+
 function isNormalInteger(str) {
     return /^\+?(0|[1-9]\d*)$/.test(str);
 }

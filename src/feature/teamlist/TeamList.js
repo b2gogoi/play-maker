@@ -1,24 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
+import Chooser from '../../components/Chooser';
 import * as v from '../../util/utils';
 
 const fields = [
-    {key: 'firstName', label: 'First Name', validationCheck: [v.types.REQUIRED, v.types.NAME]},
-    {key: 'lastName', label: 'Last Name', validationCheck: [v.types.REQUIRED, v.types.NAME]},
-    {key: 'height', label: 'Height (in cms)', validationCheck: [v.types.REQUIRED, v.types.NUM_ONLY, v.types.HEIGHT]}
+    {key: 'firstName', type: 'text', label: 'First Name', validationCheck: [v.types.REQUIRED, v.types.NAME]},
+    {key: 'lastName', type: 'text', label: 'Last Name', validationCheck: [v.types.REQUIRED, v.types.NAME]},
+    {key: 'height', type: 'text', label: 'Height (in cms)', validationCheck: [v.types.REQUIRED, v.types.NUM_ONLY, v.types.HEIGHT]},
+    {key: 'positions', type: 'chooser', label: 'Position(s)', validationCheck: [v.types.REQUIRED]}
 ];
 
-const initialPlayerState = (() => fields.reduce((acc, f) => {
-        return {...acc, [f.key]:{value: ''}}
-    }, {}))();
+// Initializing from fields, sample below
+/*
+    {
+        firstName: { value: ''},
+        lastName: { value: ''},
+        height: { value: ''},
+        positions: { 
+            value: {
+                PG: false,
+                SG: false,
+                C: false,
+                SF: false,
+                PF: false
+
+            }
+        }
+    }
+*/
+const initialPlayerState = ((pos) => {
+    const init = fields.reduce((acc, f) => {
+        let value = '';
+        if (f.type === 'chooser') {
+            value = pos.reduce((acc, p) => {return {...acc, [p.code]:false}}, {});
+        }
+        return {...acc, [f.key]:{value: value}}
+    }, {});
+    return init;
+})(v.positions);
 
 function AddPlayerForm (props) {
     const [player, setPlayer] = useState(initialPlayerState);
     const [enableSave, setEnableSave] = useState(false);
 
     const updatePlayer = () => {
-        const newPlayer =  Object.keys(player).reduce((acc, key)=>({...acc, [key]: player[key].value.trim()}), {});
+        const newPlayer =  Object.keys(player).reduce((acc, key)=> {
+            const value = typeof player[key].value === 'string'
+                ? player[key].value.trim()
+                : Object.entries(player[key].value).filter(([key, value]) => value===true).map(e => e[0]);
+            return {...acc, [key]: value};
+        }, {});
+        console.log(newPlayer);
         props.add(newPlayer);
     }
 
@@ -29,16 +62,35 @@ function AddPlayerForm (props) {
         setEnableSave(!error);
     }
 
+    const update = (data) => {
+        // console.log(JSON.stringify(player));
+        // const positions = {...player.positions, data};
+        // const key = 'positions';
+        // const value = player[key].value;
+        // console.log(player[key].value);
+        // console.log(Object.entries(data.value).filter(([key, value]) => value===true).map(e => e[0]));
+        setPlayer({...player, positions: data});
+        // console.log(JSON.stringify({...player, positions}));
+    }
+
     return (
         <div className="addplayer-form">
             <form noValidate autoComplete="off">
                 {fields.map(f => 
                     <div key={f.key}>
-                        <TextField required label={f.label}
+                        {f.type==='text' && <TextField required label={f.label}
                             error={Boolean(player[f.key].error)}
                             helperText={player[f.key].error}
                             onFocus={(e) => setEnableSave(false)}
                             onBlur={(e) => validate(e.target.value, f)} />
+                        }
+
+                        {f.type==='chooser' && <Chooser field={f} 
+                            options={v.positions} 
+                            update={update}
+                            data={player[f.key]}
+                        />
+                        }
                     </div>
                 )}
             </form>
@@ -56,6 +108,7 @@ function PlayerList (props) {
         <div className="players-list">
             {props.players.map((plyr, idx) => <div key={`${idx}-${plyr.firstName}`}>
                     {idx+1}. {plyr.firstName} {plyr.lastName} ({plyr.height} cms)
+                    : {plyr.positions.map(p => <span key={p}>{p}</span>)}
                 </div>
             )}
         </div>
