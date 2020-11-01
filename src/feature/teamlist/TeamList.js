@@ -125,7 +125,7 @@ function PlayerList (props) {
             </div>
             {props.players.map((plyr, idx) =>(
                 <div key={`${idx}-${plyr.firstName}`}>
-                    <div className="sl">{idx+1}.</div>
+                    <div className="sl">{plyr.id}.</div>
                     <div className="name">{plyr.firstName} {plyr.lastName} </div>
                     <div className="height">{plyr.height} cm</div>
                     <div className="position"> {plyr.positions.map(p => 
@@ -145,7 +145,8 @@ export default function TeamList (props) {
     const [showAddPlayer, setShowAddPlayer] = useState(false);
 
     const add = (player) => {
-        setPlayers([...players, player]);
+        
+        setPlayers([...players, {...player, id: (players.length + 1)}]);
         setShowAddPlayer(false);
         props.update([...players, player]);
     }

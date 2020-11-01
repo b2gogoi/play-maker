@@ -98,3 +98,26 @@
   margin-right: 10px;
 }
 
+.quarter-box {
+  margin: 20px 0;
+  border: 1px solid #c0c2c5;
+  border-radius: 4px;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.quarter-box > div {
+  display: flex;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.quarter-box > div > div:first-child {
+  flex-basis: 200px;
+  vertical-align: middle;
+}
+
+.error {
+  color: red;
+  font-style: italic;
+}

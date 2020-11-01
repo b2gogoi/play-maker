@@ -5,7 +5,14 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import TeamList from './feature/teamlist/TeamList';
 import Quarter from './feature/quarter/Quarter';
+import * as v from './util/utils';
 import './App.css';
+
+const emptyQuarter = (() => {
+  return v.positions.reduce((acc, p) => {
+    return {...acc, [p.code]: ''};
+  }, {});
+})();
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -28,19 +35,19 @@ function TabPanel(props) {
 }
 
 const teamDummy = [
-  { firstName: 'Bhaskar', lastName: 'Gogoi', height: 162, positions: ['C'] },
-  { firstName: 'Jean', lastName: 'Marc', height: 222, positions: ['SF', 'PG'] },
-  { firstName: 'Lebron', lastName: 'James', height: 179, positions: ['SG'] },
-  { firstName: 'Kobe', lastName: 'Bryant', height: 240, positions: ['SG'] },
-  { firstName: 'Michael', lastName: 'Jordan', height: 212, positions: ['PF', 'C', 'SF', 'SG', 'PG'] },
-  { firstName: 'Magic', lastName: 'Johnson', height: 134, positions: ['PF', 'SF'] },
-  { firstName: 'Shaq', lastName: 'Oneal', height: 299, positions: ['PF', 'C'] },
+  { id: 1, firstName: 'Bhaskar', lastName: 'Gogoi', height: 162, positions: ['C'] },
+  { id: 2, firstName: 'Jean', lastName: 'Marc', height: 222, positions: ['SF', 'PG'] },
+  { id: 3, firstName: 'Lebron', lastName: 'James', height: 179, positions: ['SG'] },
+  { id: 4, firstName: 'Kobe', lastName: 'Bryant', height: 240, positions: ['SG'] },
+  { id: 5, firstName: 'Michael', lastName: 'Jordan', height: 212, positions: ['PF', 'C', 'SF', 'SG', 'PG'] },
+  { id: 6, firstName: 'Magic', lastName: 'Johnson', height: 134, positions: ['PF', 'SF'] },
+  { id: 7, firstName: 'Shaq', lastName: 'Oneal', height: 299, positions: ['PF', 'C'] },
 ]
 
 function App() {
   const [tab, setTab] = useState(0);
   const [team, setTeam] = useState(teamDummy);
-  const [quarter, setQuarter] = useState({});
+  const [quarter, setQuarter] = useState(emptyQuarter);
 
 
 
@@ -68,7 +75,7 @@ function App() {
             <TeamList team={team} update={updateTeam} />
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <Quarter team={team} quarter={quarter} />
+            <Quarter team={team} quarter={quarter} update={setQuarter} />
           </TabPanel>
       </div>
     </div>
