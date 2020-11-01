@@ -5,23 +5,28 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import * as v from '../util/utils';
 
 export default function Chooser (props) {
 
     const [data, setData] = useState(props.data);
-    const [error, setError] = useState(false);
+    const [values, setValues] = useState(props.data.value);
+    const [error, setError] = useState(props.data.error);
 
     const handleChange = (event) => {
         const code = event.target.value;
-    
-        const value = { ...data.value, [code]:event.target.checked};
-        setData({...data, value});
-        setError(Object.entries(value).filter(([key, value]) => value ===true).length > 0 ? '': 'Atleast one position needs to be selected.');
-     };
 
-     useEffect(() => {
-         props.update(data);
-     }, [data]);
+        const updatedValues = {...values, [code]:event.target.checked};
+        setValues(updatedValues);
+        
+        const error = v.check(updatedValues, props.field.label, props.field.validationCheck);
+        setError(error);
+
+        const updated = {...data, value: updatedValues, error};
+        setData(updated);
+
+        props.update(updated); 
+    };
 
     return (
         <FormControl component="fieldset" required error={Boolean(error)}>

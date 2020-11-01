@@ -8,7 +8,7 @@ const fields = [
     {key: 'firstName', type: 'text', label: 'First Name', validationCheck: [v.types.REQUIRED, v.types.NAME]},
     {key: 'lastName', type: 'text', label: 'Last Name', validationCheck: [v.types.REQUIRED, v.types.NAME]},
     {key: 'height', type: 'text', label: 'Height (in cms)', validationCheck: [v.types.REQUIRED, v.types.NUM_ONLY, v.types.HEIGHT]},
-    {key: 'positions', type: 'chooser', label: 'Position(s)', validationCheck: [v.types.REQUIRED]}
+    {key: 'positions', type: 'chooser', label: 'Position', validationCheck: [v.types.REQUIRED]}
 ];
 
 // Initializing from fields, sample below
@@ -42,35 +42,48 @@ const initialPlayerState = ((pos) => {
 
 function AddPlayerForm (props) {
     const [player, setPlayer] = useState(initialPlayerState);
-    const [enableSave, setEnableSave] = useState(false);
-
-    const updatePlayer = () => {
-        const newPlayer =  Object.keys(player).reduce((acc, key)=> {
-            const value = typeof player[key].value === 'string'
-                ? player[key].value.trim()
-                : Object.entries(player[key].value).filter(([key, value]) => value===true).map(e => e[0]);
-            return {...acc, [key]: value};
-        }, {});
-        console.log(newPlayer);
-        props.add(newPlayer);
-    }
-
+    const [postions, setPositions] = useState(initialPlayerState.positions);
+ 
     const validate = (value, f) => {
         const error = v.check(value, f.label, f.validationCheck);
         const clone = {...player[f.key], value, error};    
         setPlayer({...player, [f.key]:clone});
-        setEnableSave(!error);
     }
 
-    const update = (data) => {
-        // console.log(JSON.stringify(player));
-        // const positions = {...player.positions, data};
-        // const key = 'positions';
-        // const value = player[key].value;
-        // console.log(player[key].value);
-        // console.log(Object.entries(data.value).filter(([key, value]) => value===true).map(e => e[0]));
+    const validateForm = () => {
+        let clone = {...player};
+        let ok = true;
+
+        fields.forEach(f => {           
+            const error = v.check({...player[f.key]}.value, f.label, f.validationCheck);
+            const field = {...player[f.key], error};
+            clone = {...clone, [f.key]: field};
+            console.log(f.key, error);
+
+            if (error) {
+                ok = false;
+            }
+        });
+        setPlayer(clone);
+        return ok;
+    }
+
+    const updatePlayer = () => {
+
+        if (validateForm()) {
+            const newPlayer =  Object.keys(player).reduce((acc, key)=> {
+                const value = typeof player[key].value === 'string'
+                    ? player[key].value.trim()
+                    : Object.entries(player[key].value).filter(([key, value]) => value===true).map(e => e[0]);
+                return {...acc, [key]: value};
+            }, {});
+    
+            props.add(newPlayer);
+        }
+    }
+
+    const updatePostions = (data) => {
         setPlayer({...player, positions: data});
-        // console.log(JSON.stringify({...player, positions}));
     }
 
     return (
@@ -78,16 +91,15 @@ function AddPlayerForm (props) {
             <form noValidate autoComplete="off">
                 {fields.map(f => 
                     <div key={f.key}>
-                        {f.type==='text' && <TextField required label={f.label}
+                        {f.type==='text' && <TextField required label={f.label} autoComplete='off'
                             error={Boolean(player[f.key].error)}
-                            helperText={player[f.key].error}
-                            onFocus={(e) => setEnableSave(false)}
+                            helperText={player[f.key].error} 
                             onBlur={(e) => validate(e.target.value, f)} />
                         }
 
                         {f.type==='chooser' && <Chooser field={f} 
                             options={v.positions} 
-                            update={update}
+                            update={updatePostions}
                             data={player[f.key]}
                         />
                         }
@@ -95,7 +107,7 @@ function AddPlayerForm (props) {
                 )}
             </form>
             <div className="action-row">
-                <Button variant="contained" color="primary" onClick={updatePlayer} disabled={!enableSave}>
+                <Button variant="contained" color="primary" onClick={updatePlayer} >
                     Save
                 </Button>
             </div>

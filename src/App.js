@@ -37,7 +37,6 @@ function App() {
     setTeam(players);
   }
   
-
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };

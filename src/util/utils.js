@@ -1,5 +1,3 @@
-
-
 export const types = {
     REQUIRED: 'required', 
     NUM_ONLY: 'number',
@@ -29,9 +27,18 @@ export const check = (value, label, checkTypesList) => {
     for (let t of checkTypesList) {
         switch (t) {
             case types.REQUIRED:
-                if (!value.trim()) {
-                    error = `${label} is required`;
-                }
+
+                if (typeof value === 'string') {
+                    if (!value.trim()) {
+                        error = `${label} is required`;
+                    }
+                } else {
+                    const positions = Object.entries(value);
+                    const selectedPositions = positions.filter(([key, value]) => value ===true);
+                    console.log('selectedPositions : ', selectedPositions);
+                    error = Object.entries(value).filter(([key, value]) => value ===true).length > 0
+                    ? '': `Atleast one ${label} needs to be selected.`
+                }    
                 break;
             
             case types.NUM_ONLY:
@@ -59,6 +66,7 @@ export const check = (value, label, checkTypesList) => {
                         error = `${label} is too long`;
                     }
                     break;
+            
             default:
                 break;
         }
