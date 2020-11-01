@@ -27,10 +27,22 @@ function TabPanel(props) {
   );
 }
 
+const teamDummy = [
+  { firstName: 'Bhaskar', lastName: 'Gogoi', height: 162, positions: ['C'] },
+  { firstName: 'Jean', lastName: 'Marc', height: 222, positions: ['SF', 'PG'] },
+  { firstName: 'Lebron', lastName: 'James', height: 179, positions: ['SG'] },
+  { firstName: 'Kobe', lastName: 'Bryant', height: 240, positions: ['SG'] },
+  { firstName: 'Michael', lastName: 'Jordan', height: 212, positions: ['PF', 'C', 'SF', 'SG', 'PG'] },
+  { firstName: 'Magic', lastName: 'Johnson', height: 134, positions: ['PF', 'SF'] },
+  { firstName: 'Shaq', lastName: 'Oneal', height: 299, positions: ['PF', 'C'] },
+]
+
 function App() {
   const [tab, setTab] = useState(0);
-  const [team, setTeam] = useState([]);
+  const [team, setTeam] = useState(teamDummy);
   const [quarter, setQuarter] = useState({});
+
+
 
   const updateTeam = (players) => {
     console.log('updateTeam : ', players.length);

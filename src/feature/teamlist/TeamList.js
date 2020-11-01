@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Avatar, Button, Chip, TextField } from '@material-ui/core';
 import Chooser from '../../components/Chooser';
 import * as v from '../../util/utils';
 
@@ -118,11 +117,25 @@ function AddPlayerForm (props) {
 function PlayerList (props) {
     return (
         <div className="players-list">
-            {props.players.map((plyr, idx) => <div key={`${idx}-${plyr.firstName}`}>
-                    {idx+1}. {plyr.firstName} {plyr.lastName} ({plyr.height} cms)
-                    : {plyr.positions.map(p => <span key={p}>{p}</span>)}
+            <div>
+                <div className="sl">#</div>
+                <div className="name">Name</div>
+                <div className="height">Height</div>
+                <div className="position">Position(s)</div>
+            </div>
+            {props.players.map((plyr, idx) =>(
+                <div key={`${idx}-${plyr.firstName}`}>
+                    <div className="sl">{idx+1}.</div>
+                    <div className="name">{plyr.firstName} {plyr.lastName} </div>
+                    <div className="height">{plyr.height} cm</div>
+                    <div className="position"> {plyr.positions.map(p => 
+                        <Chip key={p} variant="outlined" 
+                            color="primary" size="medium" avatar={<Avatar>{p}</Avatar>}
+                            label={v.positionLabel(p)}
+                        />
+                    )}</div>
                 </div>
-            )}
+            ))}
         </div>
     )
 }

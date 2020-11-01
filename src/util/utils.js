@@ -11,7 +11,11 @@ export const positions = [
     {name: 'Small Forward', code: 'SF'},
     {name: 'Power Forward', code: 'PF'},
     {name: 'Center', code: 'C'}
-]
+];
+
+export function positionLabel (code) {
+    return positions.find(p => p.code === code)?.name;
+}
 
 function isNormalInteger(str) {
     return /^\+?(0|[1-9]\d*)$/.test(str);

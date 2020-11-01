@@ -72,4 +72,29 @@
   padding: 15px 0;
 }
 
+.players-list > div {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    height: 40px;
+}
+
+.players-list > div > .sl {
+  flex-basis: 20px;
+}
+.players-list > div > .name {
+  flex-basis: 400px;
+}
+
+.players-list > div > .height {
+  flex-basis: 120px;
+}
+
+.players-list > div > .position {
+  display: flex;
+  justify-content: flex-start;
+}
+.players-list > div > .position > div {
+  margin-right: 10px;
+}
 
