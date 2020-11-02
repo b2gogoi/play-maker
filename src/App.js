@@ -14,6 +14,15 @@ const emptyQuarter = (() => {
   }, {});
 })();
 
+// For testing
+const dummyQuarter = {
+  C: 1,
+  SF: 2,
+  PF: 6,
+  PG: 5,
+  SG: 4
+}
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -47,9 +56,8 @@ const teamDummy = [
 function App() {
   const [tab, setTab] = useState(0);
   const [team, setTeam] = useState(teamDummy);
-  const [quarter, setQuarter] = useState(emptyQuarter);
-
-
+  // const [quarter, setQuarter] = useState(emptyQuarter);
+  const [quarter, setQuarter] = useState(dummyQuarter);
 
   const updateTeam = (players) => {
     console.log('updateTeam : ', players.length);

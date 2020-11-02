@@ -53,7 +53,7 @@ function Position (props) {
 
     }
     return (
-        <FormControl variant="outlined" className={classes.formControl} error={error}>
+        <FormControl variant="outlined" className={classes.formControl} error={error} disabled={props.disabled}>
             <Select
                 value={player || ''}
                 onChange={handleChange}
@@ -116,16 +116,19 @@ export default function Quarter (props) {
                 {v.positions.map(p => <div key={p.code}>
                         <div><label>{v.positionLabel(p.code)}</label></div>
                         <div>
-                            <Position position={p} players={props.team} player={quarter[p.code]} update={updatePosition} quarter={quarter} />
+                            <Position position={p} players={props.team} player={quarter[p.code]} update={updatePosition} quarter={quarter} disabled={isQuarterSet} />
                         </div>
                     </div>
                 )}
             </div>
             {error && <div className="error">{error}</div>}
             <div className="action-row">
-                <Button variant="contained" color="primary" onClick={updateQuarter} >
+                {isQuarterSet && <Button variant="contained" color="primary" onClick={e => setIsQuarterSet(false)} >
+                    Edit Positions
+                </Button>}
+                {!isQuarterSet && <Button variant="contained" color="primary" onClick={updateQuarter} >
                     Save Quarter Positions
-                </Button>
+                </Button>}
             </div>
         </>
     )
