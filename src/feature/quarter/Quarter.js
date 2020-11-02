@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
+import React, { useEffect, useState } from 'react';
+import { MenuItem, FormHelperText, FormControl, Button, Select } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Select } from '@material-ui/core';
 import * as v from '../../util/utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +50,17 @@ function Position (props) {
         props.update(props.position.code, playerId);
 
     }
+
+    useEffect(() => {
+        if (player) {
+            let idCount = Object.values(props.quarter).filter(id => id === player).length;
+            if (idCount > 1) {
+                setError('Player is already selected for another position');
+            } else {
+                setError();
+            }
+        }
+    }, [props.quarter, player, setError]);
     return (
         <FormControl variant="outlined" className={classes.formControl} error={error} disabled={props.disabled}>
             <Select

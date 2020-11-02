@@ -41,11 +41,13 @@ const initialPlayerState = ((pos) => {
 
 function AddPlayerForm (props) {
     const [player, setPlayer] = useState(initialPlayerState);
+    const [error, setError] = useState();
  
     const validate = (value, f) => {
         const error = v.check(value, f.label, f.validationCheck);
         const clone = {...player[f.key], value, error};    
         setPlayer({...player, [f.key]:clone});
+        setError(error);
     }
 
     const validateForm = () => {
@@ -60,6 +62,7 @@ function AddPlayerForm (props) {
 
             if (error) {
                 ok = false;
+                setError(error);
             }
         });
         setPlayer(clone);
@@ -104,6 +107,7 @@ function AddPlayerForm (props) {
                     </div>
                 )}
             </form>
+            {error && <p className="error">{error}</p>}
             <div className="action-row">
                 <Button variant="contained" color="primary" onClick={updatePlayer} >
                     Save

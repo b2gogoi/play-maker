@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
+import { AppBar, Tabs, Tab, Box } from '@material-ui/core';
 import TeamList from './feature/teamlist/TeamList';
 import Quarter from './feature/quarter/Quarter';
 import * as v from './util/utils';
