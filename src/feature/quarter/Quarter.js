@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Position (props) {
     const classes = useStyles();
-    const [player, setPlayer] = useState('');
+    const [player, setPlayer] = useState(props.player);
     const [error, setError] = useState();
 
     const renderPlayers = (code) => {
@@ -46,6 +46,8 @@ function Position (props) {
         if(alreadySet) {
             setError('Player is already selected for another position');
             hasDuplicate = true;
+        } else {
+            setError();
         }
         props.update(props.position.code, playerId, hasDuplicate);
 
@@ -69,8 +71,20 @@ function Position (props) {
     )
 }
 
+const isAllQuarterPositionsFilled = (qtr) => {
+    let allSet = true;
+    let selectPlayers = Object.values(qtr);
+    for(let p of selectPlayers) {
+        if (!p) {
+            allSet = false;
+        }
+    }
+    return allSet;
+}
+
 export default function Quarter (props) {
     const [quarter, setQuarter] = useState(props.quarter);
+    const [isQuarterSet, setIsQuarterSet] = useState(isAllQuarterPositionsFilled(props.quarter));
     const [error, setError] = useState();
     const [hasDuplicate, setHasDuplicate] = useState(false);
 
@@ -81,29 +95,23 @@ export default function Quarter (props) {
     };
 
     const updateQuarter = () => {
-        let notSet = false;
-        let selectPlayers = Object.values(quarter);
-        for(let p of selectPlayers) {
-            if (!p) {
-                notSet = true;
-            }
-        }
-
-        if(notSet) {
+        if(!isAllQuarterPositionsFilled(quarter)) {
             setError('Players must be selected for all positions');
 
         } else if(hasDuplicate) {
             setError('Player is already selected for another position');
         } else {
+            setIsQuarterSet(true);
+            setError();
             props.update(quarter);
         }
-        console.log('update quarter : ', quarter);
     }
 
     return (
         <>
             <h2>Quarter Position Assignment</h2>
-            <span><em>Assign players to all {v.positions.length} positions for the quarter</em></span>
+            {!isQuarterSet && <span><em>Assign players to all {v.positions.length} positions for the quarter</em></span>}
+            {isQuarterSet && <span><em>Following Players are assigned for all the {v.positions.length} positions.</em></span>}
             <div className="quarter-box">
                 {v.positions.map(p => <div key={p.code}>
                         <div><label>{v.positionLabel(p.code)}</label></div>

@@ -145,10 +145,12 @@ export default function TeamList (props) {
     const [showAddPlayer, setShowAddPlayer] = useState(false);
 
     const add = (player) => {
+        // add ID
+        const clone = {...player, id: (players.length + 1)};
         
-        setPlayers([...players, {...player, id: (players.length + 1)}]);
+        setPlayers([...players, clone]);
         setShowAddPlayer(false);
-        props.update([...players, player]);
+        props.update([...players, clone]);
     }
 
     return (

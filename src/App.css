@@ -83,7 +83,7 @@
   flex-basis: 20px;
 }
 .players-list > div > .name {
-  flex-basis: 400px;
+  flex-basis: 300px;
 }
 
 .players-list > div > .height {
