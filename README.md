@@ -53,5 +53,7 @@ The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
 Screenshots
-![alt text](Quarter.jpg?raw=true)
+![Teamlist](Teamlist.png?raw=true)
+![Add Player](AddPlayer.png?raw=true)
+![Quarter](Quarter.png?raw=true)
 
