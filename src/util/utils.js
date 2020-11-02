@@ -1,3 +1,7 @@
+/*
+ This contains both util functions and application constants
+*/
+
 export const types = {
     REQUIRED: 'required', 
     NUM_ONLY: 'number',

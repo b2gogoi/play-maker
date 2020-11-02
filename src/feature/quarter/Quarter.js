@@ -15,7 +15,17 @@ const useStyles = makeStyles((theme) => ({
       selectEmpty: {
         marginTop: theme.spacing(-1),
       },
-  }));
+}));
+
+function hasDuplicatePlayerInQuarter(qtr, playerId) {
+    let alreadySet = false;
+    for(let id of Object.values(qtr)) {
+        if (playerId === id) {
+            alreadySet = true;
+        }
+    }
+    return alreadySet;
+}
 
 function Position (props) {
     const classes = useStyles();
@@ -33,23 +43,14 @@ function Position (props) {
     const handleChange = (e) => {
         const playerId = e.target.value;
         setPlayer(playerId);
-        let hasDuplicate = false;
-        
-
-        let alreadySet = false;
-        for(let id of Object.values(props.quarter)) {
-            if (playerId === id) {
-                alreadySet = true;
-            }
-        }
-
-        if(alreadySet) {
+        let hasDuplicate = hasDuplicatePlayerInQuarter(props.quarter, playerId);
+ 
+        if(hasDuplicate) {
             setError('Player is already selected for another position');
-            hasDuplicate = true;
         } else {
             setError();
         }
-        props.update(props.position.code, playerId, hasDuplicate);
+        props.update(props.position.code, playerId);
 
     }
     return (
@@ -82,23 +83,35 @@ const isAllQuarterPositionsFilled = (qtr) => {
     return allSet;
 }
 
+function hasDuplicateValues(qtr) {
+    const valCount = {};
+    
+    for(let pId of Object.values(qtr)) {
+        if (valCount[`${pId}`]) {
+            return true;
+        } else {
+            valCount[`${pId}`] = 1;
+        }
+    }
+
+    return false;
+}
+
 export default function Quarter (props) {
     const [quarter, setQuarter] = useState(props.quarter);
     const [isQuarterSet, setIsQuarterSet] = useState(isAllQuarterPositionsFilled(props.quarter));
     const [error, setError] = useState();
-    const [hasDuplicate, setHasDuplicate] = useState(false);
 
-    const updatePosition = (code, playerId, hasDuplicatePlayer) => {
+    const updatePosition = (code, playerId) => {
         console.log(code, playerId);
         setQuarter({...quarter, [code]: playerId});
-        setHasDuplicate(hasDuplicatePlayer);
     };
 
     const updateQuarter = () => {
         if(!isAllQuarterPositionsFilled(quarter)) {
             setError('Players must be selected for all positions');
 
-        } else if(hasDuplicate) {
+        } else if(hasDuplicateValues(quarter)) {
             setError('Player is already selected for another position');
         } else {
             setIsQuarterSet(true);

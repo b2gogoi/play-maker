@@ -41,7 +41,6 @@ const initialPlayerState = ((pos) => {
 
 function AddPlayerForm (props) {
     const [player, setPlayer] = useState(initialPlayerState);
-    const [postions, setPositions] = useState(initialPlayerState.positions);
  
     const validate = (value, f) => {
         const error = v.check(value, f.label, f.validationCheck);

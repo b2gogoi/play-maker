@@ -56,8 +56,9 @@ const teamDummy = [
 function App() {
   const [tab, setTab] = useState(0);
   const [team, setTeam] = useState(teamDummy);
-  // const [quarter, setQuarter] = useState(emptyQuarter);
-  const [quarter, setQuarter] = useState(dummyQuarter);
+
+  const [quarter, setQuarter] = useState(emptyQuarter);
+  // const [quarter, setQuarter] = useState(dummyQuarter);
 
   const updateTeam = (players) => {
     console.log('updateTeam : ', players.length);
